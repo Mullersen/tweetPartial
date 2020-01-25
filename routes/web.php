@@ -11,6 +11,5 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'TweetController@show');
+Route::get('/{tweetId}', 'TweetController@showTweet');//whatever the user types in the placeholder{} is returned to the controller as a variable (in this case $id)
