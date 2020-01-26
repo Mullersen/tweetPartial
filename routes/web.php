@@ -11,5 +11,11 @@
 |
 */
 
-Route::get('/', 'TweetController@show');
+use App\Http\Controllers\TweetController;
+
+Route::get('/', 'TweetController@index');
 Route::get('/{tweetId}', 'TweetController@showTweet');//whatever the user types in the placeholder{} is returned to the controller as a variable (in this case $id)
+Route::post('/', 'TweetController@addTweet');
+Route::post('/deletePost', 'TweetController@deleteTweet');
+Route::post('/editPost', 'TweetController@editTweet');
+Route::post('/{tweetId}', 'TweetController@saveTweet');

@@ -28,15 +28,40 @@ class TweetController extends Controller
             'content' => 'This is my fifth tweet'
         ]
     ];
-    function show(){
-        return view('showTweets',  ["allTweets" => $this->tweets]);//were in a class, so when we want to access the variable we need to write this.
-    }
-    function showTweet($id){//the show function has to take in a function that specifies which post we want to show.
-        if ($id > sizeOf($this->tweets)){
+
+    function showTweet($id){//the show function has to take in a variable that specifies which post we want to show.
+        $tweets = \DB::table('tweet') ->get();
+
+        if ($id > sizeOf($tweets)){
             return view ('tweetError');
         } else{
-        return view('showTweets', ["allTweets" => [$this->tweets[$id]]]);
+        return view('showTweets', ["tweets" => [$tweets[$id]]]);
         }
     }
 
+    public function index(){
+        $tweets = \DB::table('tweet') ->get();
+        return view('showTweets', ['tweets' => $tweets]);
+    }
+
+    function addTweet(request $request){//a request object with its variable name(which can be named anything). We dont need to write it twice its just nice to let others know we are using the request object.
+        \DB::insert("INSERT INTO tweet (author, content) VALUES ('$request->author','$request->content')");
+        $tweets = \DB::table('tweet') ->get();
+        return view('showTweets', ['tweets' => $tweets]);
+    }
+    function deleteTweet(Request $request){//we write request because it is a post-request we are using in our router.
+        \DB::delete("DELETE FROM tweet WHERE id='$request->id'");
+        $tweets = \DB::table('tweet') ->get();
+        return view('showTweets', ['tweets' => $tweets]);
+    }
+    function editTweet(Request $request){
+        \DB::select("SELECT * FROM tweet WHERE id='$request->id'");
+        $tweets = \DB::table('tweet')->find($request->id);
+        return view('editTweet', ['tweets' => $tweets]);
+}
+    function saveTweet(Request $request){
+        \DB::update("UPDATE tweet SET author='$request->author', content='$request->content' WHERE id='$request->id'");
+        $tweets = \DB::table('tweet')->get();
+        return view('showTweets', ["tweets" => $tweets[$request->id]]);
+}
 }
