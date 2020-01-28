@@ -35,7 +35,7 @@ class TweetController extends Controller
         if ($id > sizeOf($tweets)){
             return view ('tweetError');
         } else{
-        return view('showTweets', ["tweets" => [$tweets[$id]]]);
+        return view('viewTweet', ["tweets" => [$tweets[$id]]]);
         }
     }
 
@@ -62,6 +62,6 @@ class TweetController extends Controller
     function saveTweet(Request $request){
         \DB::update("UPDATE tweet SET author='$request->author', content='$request->content' WHERE id='$request->id'");
         $tweets = \DB::table('tweet')->get();
-        return view('showTweets', ["tweets" => $tweets[$request->id]]);
+        return view('showTweets', ["tweets" => $tweets]);
 }
 }
